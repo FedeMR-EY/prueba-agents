@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ccf97177-d014-4ce0-af19-a49b4da75949" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/config/OpenApiConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/controller/AnimalController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/controller/AnimalResource.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/controller/dto/request/CreateAnimalRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/controller/dto/request/UpdateAnimalRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/controller/dto/response/AnimalResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/exception/AnimalNotFoundApiException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/exception/ApiError.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/exception/ApiException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/exception/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/exception/VeterinariaLlenaApiException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/model/entity/Animal.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/repository/AnimalRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/service/AnimalDatabaseService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/service/DatabaseService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ey/app/service/business/AnimalBusinessService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ey/app/controller/AnimalControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ey/app/exception/GlobalExceptionHandlerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ey/app/service/AnimalDatabaseServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ey/app/service/business/AnimalBusinessServiceTest.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_E:/binarydev/ey/prueba-agents" value="3A81w9IhSTmv90sjM4R8K6fkhrc" />
+    </persistenceIdMap>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="3A81w9IhSTmv90sjM4R8K6fkhrc" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.restaurante-api [clean,package].executor": "Run",
+    "Maven.restaurante-api [test].executor": "Run",
+    "Maven.veterinaria-api [clean,package].executor": "Run",
+    "Maven.veterinaria-api [test].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "apiRestaurante",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "to.speed.mode.migration.done": "true"
+  }
+}]]></component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean package" />
+      <command value="mvn test" />
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="prueba-agents" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ccf97177-d014-4ce0-af19-a49b4da75949" name="Changes" comment="" />
+      <created>1771959620838</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1771959620838</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>
