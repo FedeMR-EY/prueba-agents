@@ -5,11 +5,11 @@ import java.util.UUID;
 
 public interface DatabaseService<T> {
 
-    T save(T entity);
+  T save(T entity);
 
-    List<T> getAll();
+  List<T> getAll();
 
-    T findById(UUID id);
+  T findById(UUID id);
 
-    void deleteById(UUID id);
+  void deleteById(UUID id);
 }

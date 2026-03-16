@@ -1,35 +1,47 @@
 package com.ey.app.exception;
 
-import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<Map<String, Object>> handleUserAlreadyExists(UserAlreadyExistsException ex) {
-        log.warn("User already exists: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.CONFLICT.value(),
-                "error", "Conflict",
-                "message", ex.getMessage()));
-    }
+  @ExceptionHandler(ApiException.class)
+  public ResponseEntity<ApiError> handleApiException(ApiException ex) {
+    log.error("ApiException: {}", ex.getMessage());
+    ApiError error = ex.getError();
+    return new ResponseEntity<>(error, error.status());
+  }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
-        log.warn("Validation error: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.BAD_REQUEST.value(),
-                "error", "Bad Request",
-                "message", "Validation failed"));
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ApiError> handleValidationException(MethodArgumentNotValidException ex) {
+    log.error("Validation error: {} field errors", ex.getBindingResult().getErrorCount());
+    Map<String, String> details = new HashMap<>();
+    for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+      details.put(fieldError.getField(), fieldError.getDefaultMessage());
     }
+    ApiError error =
+        new ApiError("VALIDATION_ERROR", "Error de validacion", details, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(error, error.status());
+  }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ApiError> handleGenericException(Exception ex) {
+    log.error("Unexpected error: {}", ex.getMessage(), ex);
+    ApiError error =
+        new ApiError(
+            "INTERNAL_ERROR",
+            "Error interno del servidor",
+            Map.of(),
+            HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(error, error.status());
+  }
 }
