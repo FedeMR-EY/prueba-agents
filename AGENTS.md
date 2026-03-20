@@ -1,331 +1,93 @@
-# AGENTS.md
+# AGENTS.md - Anime Search API
+
+Este proyecto sigue los lineamientos definidos en el repositorio `java-skills-agents`.
 
 ## Stack Tecnológico
 
 | Tecnología | Versión |
 |------------|---------|
 | Java | 21 |
-| Spring Boot | 3.2+ |
+| Spring Boot | 3.2.5 |
 | PostgreSQL | 16+ |
 | Docker/Docker Compose | Local testing |
-| Gestor de dependencias | Maven |
-
-## Plugins Requeridos
-
-- **FMT Format (Google)**: Formateo de código
-- **Jacoco**: Cobertura de tests (mínimo 80%)
-
-## Formato de Configuración
-
-Usar **YAML** para todos los archivos de configuración.
-
----
+| Maven | Gestión de dependencias |
+| OpenFeign | Llamadas HTTP declarativas |
 
 ## Estructura del Proyecto
 
 ```
 java/com/ey/app/
+├── clients/
+│   ├── config/
+│   │   └── GlobalFeignConfig.java
+│   └── jikan/
+│       ├── config/
+│       │   └── JikanClientConfig.java
+│       ├── dto/response/
+│       │   ├── JikanAnimeByIdResponse.java
+│       │   └── JikanAnimeResponse.java
+│       └── JikanClient.java
 ├── config/
+│   └── OpenApiConfig.java
 ├── controller/
-│   ├── dto/
-│   │   ├── request/
-│   │   └── response/
-│   └── *Resource.java
+│   ├── dto/request/
+│   │   └── SaveFavoriteRequest.java
+│   ├── dto/response/
+│   │   ├── AnimeResponse.java
+│   │   ├── AnimeSearchResponse.java
+│   │   └── FavoriteAnimeResponse.java
+│   ├── AnimeController.java
+│   └── AnimeResource.java
 ├── exception/
-├── model/
-│   └── entity/
+│   ├── AnimeAlreadyFavoriteException.java
+│   ├── AnimeNotFoundException.java
+│   ├── ApiError.java
+│   ├── ApiException.java
+│   ├── ExternalApiException.java
+│   └── GlobalExceptionHandler.java
+├── model/entity/
+│   └── FavoriteAnime.java
 ├── repository/
+│   └── FavoriteAnimeRepository.java
 ├── service/
 │   ├── business/
-│   └── *DatabaseService.java
+│   │   └── AnimeBusinessService.java
+│   ├── DatabaseService.java
+│   └── FavoriteAnimeDatabaseService.java
 └── App.java
 ```
 
----
+## Endpoints
 
-## Convenciones de Código
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | /v1/anime/search?q={query} | Buscar anime por nombre |
+| GET | /v1/anime/{malId} | Obtener anime por ID de MAL |
+| GET | /v1/anime/top | Obtener ranking de anime |
+| POST | /v1/anime/favorites | Guardar anime en favoritos |
+| GET | /v1/anime/favorites | Listar favoritos |
+| GET | /v1/anime/favorites/{id} | Obtener favorito por ID |
+| DELETE | /v1/anime/favorites/{id} | Eliminar de favoritos |
 
-### Principios
-- Seguir **SOLID** y **Clean Architecture**
+## API Externa
 
-### Inyección de Dependencias
-```java
-// CORRECTO: Constructor explícito
-@Slf4j
-@Service
-public class UserService {
-    private final UserRepository userRepository;
+Este proyecto consume la **Jikan API** (https://api.jikan.moe/v4) para obtener información de anime de MyAnimeList.
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-}
+## Cómo Ejecutar
 
-// INCORRECTO: No usar
-@Autowired
-@RequiredArgsConstructor
+### Con Docker Compose
+
+```bash
+docker-compose up -d
 ```
 
-### Lombok
-| Usar | No Usar |
-|------|---------|
-| `@Getter`, `@Setter`, `@Builder`, `@Slf4j` | `@Data`, `@RequiredArgsConstructor` |
+### Solo Base de Datos
 
-### Logging
-Siempre usar `@Slf4j` de Lombok.
-
-### Documentación API
-Siempre usar **Swagger/OpenAPI**.
-
----
-
-## Controllers
-
-### Regla Principal
-**Los controllers NO contienen lógica.** Solo delegan a un `BusinessService`.
-
-### Definición (Interface)
-Usar sufijo `Resource`:
-
-```java
-@RequestMapping("/v1/auth")
-public interface AuthResource {
-
-    @PostMapping(value = "/register", produces = "application/json", consumes = "application/json")
-    ResponseEntity<RegisterUserResponse> registerUser(
-        @RequestBody @Valid RegisterUserRequest request);
-
-    @PostMapping(value = "/login", produces = "application/json", consumes = "application/json")
-    ResponseEntity<LoginResponse> login(
-        @RequestBody @Valid LoginRequest request);
-}
+```bash
+docker-compose up -d postgres
+mvn spring-boot:run
 ```
 
-### Implementación
-El controller solo delega al servicio de negocio correspondiente:
+### Swagger UI
 
-```java
-@Slf4j
-@RestController
-public class AuthController implements AuthResource {
-
-    private final AuthBusinessService authBusinessService;
-
-    public AuthController(AuthBusinessService authBusinessService) {
-        this.authBusinessService = authBusinessService;
-    }
-
-    @Override
-    public ResponseEntity<RegisterUserResponse> registerUser(RegisterUserRequest registerUserRequest) {
-        return authBusinessService.registerUser(registerUserRequest);
-    }
-
-    @Override
-    public ResponseEntity<LoginResponse> login(LoginRequest loginRequest) {
-        return authBusinessService.login(loginRequest);
-    }
-}
-```
-
-### Flujo de Responsabilidades
-```
-Controller → BusinessService → DatabaseService (impl) → Repository
-   (delega)      (lógica)           (CRUD)                (JPA)
-```
-
----
-
-## DTOs
-
-### Reglas de Nomenclatura
-| Tipo | Sufijo | Ejemplo |
-|------|--------|---------|
-| Request | `Request` | `RegisterUserRequest` |
-| Response | `Response` | `LoginResponse` |
-| Otros | Sin sufijo | `UserProfile`, `OrderItem` |
-
-### Implementación
-- Usar **Java Records**
-- Anotar con `@Builder`
-- **NO** usar sufijo/prefijo "DTO"
-
-```java
-@Builder
-public record RegisterUserRequest(
-    @NotBlank String email,
-    @NotBlank String password,
-    @NotBlank String name
-) {}
-
-@Builder
-public record LoginResponse(
-    String token,
-    Long expiresIn
-) {}
-```
-
-### Ubicación
-Los DTOs se crean en el paquete del contexto donde se usan:
-- Controller DTOs → `controller/dto/request/` o `controller/dto/response/`
-
----
-
-## Services
-
-### DatabaseService (Interface Base)
-```java
-public interface DatabaseService<T> {
-    T save(T entity);
-    List<T> getAll();
-    T findById(UUID id);
-    void deleteById(UUID id);
-}
-```
-
-### Implementación de DatabaseService
-**Los repositorios SOLO se inyectan en clases que implementan `DatabaseService`.**
-
-```java
-@Slf4j
-@Service
-public class UserDatabaseService implements DatabaseService<User> {
-
-    private final UserRepository userRepository;
-
-    public UserDatabaseService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public User save(User entity) {
-        return userRepository.save(entity);
-    }
-
-    @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public User findById(UUID id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public void deleteById(UUID id) {
-        userRepository.deleteById(id);
-    }
-}
-```
-
-### Business Services
-Ubicar en `service/business/`. Contienen la lógica de negocio y consumen `DatabaseService`, **nunca repositorios directamente**.
-
-```java
-@Slf4j
-@Service
-public class AuthBusinessService {
-
-    private final UserDatabaseService userDatabaseService;
-
-    public AuthBusinessService(UserDatabaseService userDatabaseService) {
-        this.userDatabaseService = userDatabaseService;
-    }
-
-    public ResponseEntity<RegisterUserResponse> registerUser(RegisterUserRequest request) {
-        // Lógica de negocio aquí
-    }
-}
-```
-
----
-
-## Testing
-
-### Frameworks
-- **JUnit 5** + **Mockito**: Tests unitarios
-- **MockMvc**: Tests de integración HTTP
-- **TestContainers**: Tests de integración con BD
-
-### Reglas Críticas
-1. **Cobertura mínima: 80%**
-2. **Evitar levantar contexto Spring** salvo necesidad absoluta
-3. Si es necesario contexto, usar slices (`@WebMvcTest`, `@DataJpaTest`)
-
-```java
-// Test unitario (preferido)
-@ExtendWith(MockitoExtension.class)
-class UserServiceTest {
-    @Mock
-    private UserRepository userRepository;
-
-    @InjectMocks
-    private UserService userService;
-}
-
-// Test integración (solo cuando necesario)
-@WebMvcTest(AuthController.class)
-class AuthControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-}
-```
-
----
-
-## Dependencias Maven
-
-```xml
-<dependencies>
-    <!-- Core -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-validation</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-
-    <!-- Dev -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-devtools</artifactId>
-        <scope>runtime</scope>
-        <optional>true</optional>
-    </dependency>
-
-    <!-- Lombok -->
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <scope>provided</scope>
-    </dependency>
-
-    <!-- Test -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-test</artifactId>
-        <scope>test</scope>
-    </dependency>
-</dependencies>
-```
-
----
-
-## Checklist Rápido
-
-- [ ] Constructor explícito para DI (no `@Autowired`)
-- [ ] `@Slf4j` en todas las clases
-- [ ] DTOs como Records con `@Builder`
-- [ ] Controllers como interfaces `*Resource`
-- [ ] Controllers solo delegan a `BusinessService` (sin lógica)
-- [ ] Repositorios solo en implementaciones de `DatabaseService`
-- [ ] Tests unitarios sin contexto Spring
-- [ ] Cobertura >= 80%
-- [ ] Swagger documentado
-- [ ] Configuración en YAML
+Una vez iniciada la aplicación, acceder a: http://localhost:8080/swagger-ui.html

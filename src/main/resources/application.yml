@@ -1,9 +1,9 @@
 spring:
   application:
-    name: app
+    name: anime-search-api
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/app_db
+    url: jdbc:postgresql://localhost:5432/anime_db
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -17,11 +17,24 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+server:
+  port: 8080
+
+# OpenFeign clients configuration
+clients:
+  jikan:
+    url: https://api.jikan.moe/v4
+
+# Logging
+logging:
+  level:
+    com.ey.app: DEBUG
+    org.springframework.cloud.openfeign: DEBUG
+
+# OpenAPI/Swagger configuration
 springdoc:
   api-docs:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui.html
-
-server:
-  port: 8080
+    operationsSorter: method
